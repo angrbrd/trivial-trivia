@@ -1,11 +1,3 @@
-// A function that selects a random integer between a given min and max
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 // A function that reads in the game data from a file
 function loadWordList(file) {
   var dataArray;
@@ -164,6 +156,39 @@ $(document).ready(function() {
   // Display only the "Start" button on document load
   $("#questionAnswers").hide();
   $("#gifyContainer").hide();
+  $("#timer").hide();
+
+  // Specify the files containing the questions and answers
+  var questionsFile = "./assets/questions.txt";
+  var answersFile = "./assets/answers.txt";
+
+  // Read in the questions and answers files into a variable
+  var allQuestions = loadWordList(questionsFile);
+  var allAnswers = loadWordList(answersFile);
+
+  // Total number of trivia questions known in advance
+  var numQuestions = 3;
+
+  // Print all the questions and answers
+  var i, j;
+  var questionString = '';
+  var option_1 = '';
+  var option_2 = '';
+  var option_3 = '';
+  var option_4 = '';
+
+  for (i = 0; i < numQuestions; i++) {
+    j = 5*i;
+    questionString = allQuestions[j];
+    option_1 = allQuestions[j+1];
+    option_2 = allQuestions[j+2];
+    option_3 = allQuestions[j+3];
+    option_4 = allQuestions[j+4];
+
+    console.log("Question: " + questionString);
+    console.log("Answer Options: \n" + option_1 + "\n" + option_2 + "\n" + option_3 + "\n" + option_4);
+    console.log("Answer is: " + allAnswers[i]);
+  }
 
   // Begin the game when the "Start" button is pressed
   $(".startButton").on("click", function () {
@@ -174,46 +199,13 @@ $(document).ready(function() {
     $("#gifyContainer").show();
     $(".panelResult").hide();
     $(".startButton").hide();
+    $("#instructions").hide();
+    $("#timer").show();
   });
 
   // Whenever one of the answer choices is selected, record the value
   $(".panelAnswer").on("click", function() {
     console.log($(this).children(".option").html());
   })
-
-/*
-  // Specify the file containing the cat breeds
-  var catBreedFile = "./assets/cat_breeds.txt";
-
-  // Store all of the cat breeds in a variable
-  var allCatBreeds = loadWordList(catBreedFile);
-
-  // Create the Hangman game object
-  var hangman = new Game(allCatBreeds);
-
-  // Initialize a new game
-  hangman.setupNewGame();
-
-  // Listen for keyboard events
-  $(document).keypress(function(evn) {
-    // Record the letter pressed on the keyboard
-    var letter = evn.key.toLowerCase();
-
-    // Update the user guess
-    hangman.updateGuess(letter);
-
-    // Check if the user has won or lost
-    hangman.checkWin();
-
-    // Update the game display
-    hangman.printStats();
-
-    // Check if the game should be restarted at this time
-    if (hangman.gameOver == true) {
-      $("#catImage").attr("src", "./assets/images/" + hangman.breed + ".jpg");
-      hangman.setupNewGame();
-    }
-  }); // user keyboard press
-*/
 
 }); // main routine
