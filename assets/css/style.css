@@ -1,0 +1,126 @@
+/*
+	Using the following color palette for this project:
+	http://www.color-hex.com/color-palette/28011
+*/
+
+body {
+	background: url(../images/trivia_opacity0.25.png);
+	background-repeat: repeat;
+}
+
+.jumbotron {
+    position: relative;
+    background-color: transparent;
+    padding: 0.6em 0.6em;
+    margin: 2.0em 0.0em 2.0em 0.0em;
+}
+
+.jumbotron .bg {
+    position: absolute;
+    left:0; top:0;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    opacity: 0.5;
+    background-color: #ff008d;
+    z-index: -1;
+    border-radius: 25px;
+}
+
+.jumbotron .content {
+  background-color: transparent;
+}
+
+.jumbotron h1 {
+	font-size: 4em;
+  color: #2200ff;
+}
+
+.jumbotron h2 {
+	font-size: 2em;
+    color: #8900ff;
+}
+
+.panel {
+	background-color: transparent;
+  border: none;
+}
+
+.panel .panelQuestion {
+  background-image: none;
+  background-color: #00dfff;
+  height: 75px;
+  border: 4px solid #8900ff;
+  border-radius: 25px;
+  margin: 0px 0px 10px 0px;
+}
+
+.panel .panelAnswer {
+  background-image: none;
+  background-color: #00ffa0;
+  height: 75px;
+  border: 4px solid #8900ff;
+  border-radius: 25px;
+  margin: 0px 0px 10px 0px;
+}
+
+.panel .panelAnswer:hover {
+  background-color: #00e590;
+}
+
+.panel .panelAnswer:active {
+  background-color: #ff008d;
+}
+
+.startButton {
+  padding: 80px 150px;
+  font-size: 50px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #8900ff;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  display: block;
+  margin: 0 auto;
+  margin-top: 65px;
+}
+
+.startButton:hover {
+	background-color: #6d00cc
+}
+
+.startButton:active {
+  background-color: #6d00cc;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+#gameImage {
+  position: absolute;
+  top: 10px;
+  left: 200px;
+  width: 250px;
+}
+
+.panelResult {
+  background-image: none;
+  height: 75px;
+  width: 100%;
+  border-radius: 25px;
+  margin: 0px 0px 10px 0px;
+  position: absolute;
+  top: 340px;
+}
+
+.resultSuccess {
+  background-color: #00ffa0;
+  border: 4px solid #8900ff;
+}
+
+.resultFail {
+  background-color: #ff008d;
+  border: 4px solid #8900ff;
+}
