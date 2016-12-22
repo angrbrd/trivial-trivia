@@ -1,3 +1,32 @@
+// ----- Game Variables ----- //
+
+// Total number of trivia questions known in advance
+var numQuestions = 3;
+
+// The list of all the game questions
+var allQuestions;
+
+// The list of all the game answers
+var allAnswers;
+
+// The question the user is currently on
+var userQuestion = 0;
+
+// The number of questions the user has gotten right and wrong
+var questionsRight = 0;
+var questionsWrong = 0;
+
+// The number of seconds given to answer a question
+var secondsGiven = 10;
+
+// The number of seconds left on the timer
+var secondsLeft;
+
+// The variable that holds the reference to the countdown timer
+var timer;
+
+// ----- Helper Functions ----- //
+
 // A function that reads in the game data from a file
 function loadWordList(file) {
   var dataArray;
@@ -18,137 +47,100 @@ function loadWordList(file) {
   return dataArray
 }
 
-// A function that determines if two arrays of the same length are equal
-function arraysEqual(arrA, arrB) {
-  for (var i = 0; i < arrA.length; i++) {
-    if (arrA[i] !== arrB[i]) {
-      return false
-    }
-  }
-
-  return true
+// A function that initializes the countdown timer
+function startTimer() {
+  timer = setInterval(decrementTimer, 1000);
 }
 
-// The Game object
-function Game(list) {
-  // Store the list of all cat breeds
-  this.allBreedsList = list;
+// A function that decrements the countdown timer once per second and updates the display
+function decrementTimer() {
+  // Decrement the number of seconds left by one
+  secondsLeft--;
 
-  // Total number of user wins, initially zero
-  this.totalWins = 0;
+  // Update the timer display
+  $("#timer").html(secondsLeft);
 
-  // Total number of user losses, initially zero
-  this.totalLosses = 0;
-
-  // Set up a new game
-  this.setupNewGame = function() {
-    // Select a random cat breed from the list
-    var randomNum = getRandomIntInclusive(0, list.length - 1);
-    this.breed = this.allBreedsList[randomNum].toLowerCase();
-
-    // Create a list of characters for the breed string
-    this.breedList = this.breed.split('');
-
-    // Create the letters guessed list, initially containing dashes
-    var guessList = [];
-    var lettersTotal = 0;
-    for (var i = 0; i < this.breedList.length; i++) {
-      if (this.breedList[i] !== " ") { // if letter, put dash
-        guessList.push("_");
-        lettersTotal ++; // keep track of how many letters the breed has
-      } else { // if space, put " "
-        guessList.push(" ");
-      }
-    }
-    this.guessList = guessList;
-
-    // Set the number of guesses to twice the number of letters
-    this.numGuesses = lettersTotal * 2;
-
-    // Set the original list of letters guessed to empty
-    this.lettersGuessed = [];
-
-    // Trigger to start a new game
-    this.gameOver = false;
-
-    // Reset the display for a new game
-    this.printStats();
-  }
-
-  // Update the user guess list with the incoming letter
-  this.updateGuess = function(letter) {
-    // Variable keeping track of whether or not a letter appears in the word
-    var inWord = false;
-
-    // Check if the given letter has already been guessed
-    if (this.lettersGuessed.indexOf(letter) !== -1) {
-      // Letter has already been guessed, do nothing
-      console.log("Letter has alredy been guessed!");
-      return
-    } else {
-      // Letter has not been guessed
-      this.lettersGuessed.push(letter);
-
-      // Check if the letter appears in the word
-      for (var i = 0; i < this.breedList.length; i++) {
-        if (this.breedList[i] === letter) { // if it matches, record it
-            this.guessList[i] = letter;
-            inWord = true;
-        }
-      }
-
-      // Letter is not in the word, decrement the number of guesses
-      if (!inWord) {
-        this.numGuesses --;
-      }
-    }
-  }
-
-  // Format a given list in order to display it nicely in HTML
-  this.printList = function(list) {
-    var myList = "";
-
-    for (var i = 0; i < list.length; i++) {
-      if (list[i] !== " ") { // if not a space, insert the character
-        myList += list[i];
-        myList += " "; // add space so several _ characters do not look like a line
-      } else { // if space, put | to separate the words
-        myList += "| ";
-      }
-    }
-
-    return myList
-  }
-
-  // Print the game stats such as letters guessed and win/loss numbers
-  this.printStats = function() {
-    $("#userGuess").html(this.printList(this.guessList));
-    $("#lettersGuessed").html(this.printList(this.lettersGuessed));
-    $("#triesLeft").html(this.numGuesses);
-    $("#totalWins").html(this.totalWins);
-    $("#totalLosses").html(this.totalLosses);
-  }
-
-  // Check if the user has won or lost
-  this.checkWin = function() {
-    if (arraysEqual(this.guessList, this.breedList) && (this.numGuesses >= 0)) {
-      // User has won the game
-      $("#userWinMessage").html("<strong>You have guessed " + this.guessList.join('') + " correctly!<strong>");
-      this.totalWins ++;
-      this.gameOver = true;
-    } else if (!arraysEqual(this.guessList, this.breedList) && (this.numGuesses <= 0)) {
-      // User has lost the game
-      $("#userLossMessage").html("<strong>You did not guess " + this.breedList.join('') + "!<strong>");
-      this.totalLosses ++;
-      this.gameOver = true;
-    } else {
-      // Game continues
-      console.log("User is still in the game...");
-    }
+  // When the timer runs out, show wrong guess
+  if (secondsLeft === 0) {
+    stopTimer();
+    displayWompWomp();
   }
 }
 
-// Run Javascript when the HTML has finished loading
+// A function that stops the countdown timer
+function stopTimer() {
+  clearInterval(timer);
+}
+
+// A function that updates the display to the given question number
+function updateQuestion() {
+    // Variable that helps to find the appropriate question inside the questions array
+    var questionOffset = userQuestion * 5;
+
+    var questionString = allQuestions[questionOffset];
+    var option_1 = allQuestions[questionOffset + 1];
+    var option_2 = allQuestions[questionOffset + 2];
+    var option_3 = allQuestions[questionOffset + 3];
+    var option_4 = allQuestions[questionOffset + 4];
+
+    // Update the display
+    $("#question").html(questionString);
+    $("#option_1").html(option_1);
+    $("#option_2").html(option_2);
+    $("#option_3").html(option_3);
+    $("#option_4").html(option_4);
+}
+
+// A function that displays the answer when the user runs out of time or guesses incorrectly
+function displayWompWomp() {
+  // Record the wrong answer
+  questionsWrong++;
+
+  // Update the display
+  $("#gameImage").attr("src", "./assets/images/fail" + userQuestion + ".gif");
+  $(".panelResult").addClass("resultFail");
+  $("#result").html("Womp womp... the correct answer is " + allAnswers[userQuestion]);
+  $(".panelResult").show();
+
+  // Advance to the next question after a few seconds
+  setTimeout(nextQuestion, 5000);
+}
+
+// A function that displays the answer when the user guesses correctly
+function displayWeee() {
+  // Record the correct answer
+  questionsRight++;
+  
+  // Update the display
+  $("#gameImage").attr("src", "./assets/images/success" + userQuestion + ".gif");
+  $(".panelResult").addClass("resultSuccess");
+  $("#result").html("Weee! That's right! The answer is " + allAnswers[userQuestion]);
+  $(".panelResult").show();
+
+  // Advance to the next question after a few seconds
+  setTimeout(nextQuestion, 5000);
+}
+
+// A function that advances the game to the next question
+function nextQuestion() {
+  if (userQuestion < numQuestions-1) {
+    $("#gameImage").hide();
+    $(".panelResult").hide();
+
+    userQuestion++;
+    updateQuestion();
+
+    $("#timer").html(secondsGiven);
+    secondsLeft = secondsGiven;
+    startTimer();
+  } else {
+    // The game is over, ask the user if they would like to play again
+    console.log("Game over! Play again?");
+  }
+}
+
+// ----- Main Game Routine ----- //
+
 $(document).ready(function() {
 
   console.log("ENTER Javascript");
@@ -163,49 +155,35 @@ $(document).ready(function() {
   var answersFile = "./assets/answers.txt";
 
   // Read in the questions and answers files into a variable
-  var allQuestions = loadWordList(questionsFile);
-  var allAnswers = loadWordList(answersFile);
-
-  // Total number of trivia questions known in advance
-  var numQuestions = 3;
-
-  // Print all the questions and answers
-  var i, j;
-  var questionString = '';
-  var option_1 = '';
-  var option_2 = '';
-  var option_3 = '';
-  var option_4 = '';
-
-  for (i = 0; i < numQuestions; i++) {
-    j = 5*i;
-    questionString = allQuestions[j];
-    option_1 = allQuestions[j+1];
-    option_2 = allQuestions[j+2];
-    option_3 = allQuestions[j+3];
-    option_4 = allQuestions[j+4];
-
-    console.log("Question: " + questionString);
-    console.log("Answer Options: \n" + option_1 + "\n" + option_2 + "\n" + option_3 + "\n" + option_4);
-    console.log("Answer is: " + allAnswers[i]);
-  }
+  allQuestions = loadWordList(questionsFile);
+  allAnswers = loadWordList(answersFile);
 
   // Begin the game when the "Start" button is pressed
   $(".startButton").on("click", function () {
     console.log("Start button clicked!");
 
-    // Show the question and answer panel and hide the "Start" button
-    $("#questionAnswers").show();
+    // Update the display
     $("#gifyContainer").show();
     $(".panelResult").hide();
     $(".startButton").hide();
     $("#instructions").hide();
+
+    // Display the first question
+    updateQuestion();
+    $("#questionAnswers").show();
+
+    // Start the countdown timer
+    $("#timer").html(secondsGiven);
     $("#timer").show();
+    secondsLeft = secondsGiven;
+    startTimer();
   });
 
   // Whenever one of the answer choices is selected, record the value
   $(".panelAnswer").on("click", function() {
     console.log($(this).children(".option").html());
+
+
   })
 
-}); // main routine
+}); // main game routine
