@@ -53,6 +53,7 @@ body {
   border: 4px solid #8900ff;
   border-radius: 25px;
   margin: 0px 0px 10px 0px;
+  padding-top: 10px;
 }
 
 .panel .panelAnswer {
@@ -62,6 +63,7 @@ body {
   border: 4px solid #8900ff;
   border-radius: 25px;
   margin: 0px 0px 10px 0px;
+  padding-top: 23px; 
 }
 
 .panel .panelAnswer:hover {
@@ -111,6 +113,7 @@ body {
   width: 100%;
   border-radius: 25px;
   margin: 0px 0px 10px 0px;
+  padding-top: 23px;
   position: absolute;
   top: 340px;
 }
