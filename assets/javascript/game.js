@@ -98,6 +98,8 @@ function displayWompWomp() {
 
   // Update the display
   $("#gameImage").attr("src", "./assets/images/fail" + userQuestion + ".gif");
+  $("#gameImage").show();
+
   $(".panelResult").addClass("resultFail");
   $("#result").html("Womp womp... the correct answer is " + allAnswers[userQuestion]);
   $(".panelResult").show();
