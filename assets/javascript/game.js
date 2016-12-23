@@ -1,6 +1,6 @@
 // ----- Game Variables ----- //
 
-// Total number of trivia questions known in advance
+// Total number of trivia questions
 var numQuestions = 5;
 
 // The list of all the game questions
@@ -12,18 +12,20 @@ var allAnswers;
 // The question the user is currently on
 var userQuestion = 0;
 
-// The number of questions the user has gotten right and wrong
+// The number of questions the user has gotten right
 var questionsRight = 0;
-var questionsWrong = 0;
 
 // The number of seconds given to answer a question
-var secondsGiven = 20;
+var secondsGiven = 30;
 
 // The number of seconds left on the timer
 var secondsLeft;
 
 // The variable that holds the reference to the countdown timer
 var timer;
+
+// Variable that keeps track of answers being double clicked
+var clicked = false;
 
 // ----- Helper Functions ----- //
 
@@ -95,9 +97,6 @@ function updateQuestion() {
 
 // A function that displays the answer when the user runs out of time or guesses incorrectly
 function displayWompWomp() {
-  // Record the wrong answer
-  questionsWrong++;
-
   // Update the display
   $("#gameImage").attr("src", "./assets/images/fail" + userQuestion + ".gif");
   $("#gameImage").show();
@@ -143,7 +142,7 @@ function displayWeee() {
 
 // A function that advances the game to the next question
 function nextQuestion() {
-    $("#gameImage").hide();
+    $("#gameImage").attr("src", "./assets/images/question_mark.png");
     $(".panelResult").hide();
 
     userQuestion++;
@@ -152,6 +151,7 @@ function nextQuestion() {
     $("#timer").html("Time remaining: " + secondsGiven);
     secondsLeft = secondsGiven;
     startTimer();
+    clicked = false;
 }
 
 // A function that displays the "Play Again" button
@@ -204,21 +204,24 @@ $(document).ready(function() {
 
   // Whenever one of the answer choices is selected, record the value
   $(".panelAnswer").on("click", function() {
-    console.log($(this).children(".option").html() + " is selected");
+    if (clicked === false) {
+      clicked = true;
+      console.log($(this).children(".option").html() + " is selected");
 
-    var userGuess = $(this).children(".option").text().trim();
-    var answer = allAnswers[userQuestion].trim();
+      var userGuess = $(this).children(".option").text().trim();
+      var answer = allAnswers[userQuestion].trim();
 
-    if (userGuess === answer) {
-      console.log("User guessed correctly!");
+      if (userGuess === answer) {
+        console.log("User guessed correctly!");
 
-      stopTimer();
-      displayWeee();
-    } else {
-      console.log("User guessed incorrectly");
+        stopTimer();
+        displayWeee();
+      } else {
+        console.log("User guessed incorrectly");
 
-      stopTimer();
-      displayWompWomp();
+        stopTimer();
+        displayWompWomp();
+      }
     }
   });
 
@@ -227,9 +230,10 @@ $(document).ready(function() {
     // Reset the game statistics
     userQuestion = 0;
     questionsRight = 0;
-    questionsWrong = 0;
+    clicked = false;
 
     // Update the display to show only the "Start" button
+    $("#gameImage").attr("src", "./assets/images/question_mark.png");
     $("#questionAnswers").hide();
     $("#gifyContainer").hide();
     $("#timer").hide();
