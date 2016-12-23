@@ -206,6 +206,8 @@ $(document).ready(function() {
   $(".panelAnswer").on("click", function() {
     if (clicked === false) {
       clicked = true;
+      $("#gameImage").hide();
+      
       console.log($(this).children(".option").html() + " is selected");
 
       var userGuess = $(this).children(".option").text().trim();
