@@ -38,7 +38,41 @@ body {
 
 .jumbotron h2 {
 	font-size: 2em;
-    color: #8900ff;
+  color: #8900ff;
+}
+
+#questionNumber {
+  font-weight: bold;
+}
+
+#timer {
+  color: #dfff00;
+}
+
+.startButton {
+  padding: 80px 150px;
+  font-size: 50px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #8900ff;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  display: block;
+  margin: 0 auto;
+  margin-top: 65px;
+}
+
+.startButton:hover {
+  background-color: #6d00cc
+}
+
+.startButton:active {
+  background-color: #6d00cc;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 
 .panel {
@@ -74,32 +108,6 @@ body {
   background-color: #ff008d;
 }
 
-.startButton {
-  padding: 80px 150px;
-  font-size: 50px;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-  color: #fff;
-  background-color: #8900ff;
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 9px #999;
-  display: block;
-  margin: 0 auto;
-  margin-top: 65px;
-}
-
-.startButton:hover {
-	background-color: #6d00cc
-}
-
-.startButton:active {
-  background-color: #6d00cc;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-}
-
 #gameImage {
   position: absolute;
   top: 10px;
@@ -126,4 +134,21 @@ body {
 .resultFail {
   background-color: #ff008d;
   border: 4px solid #8900ff;
+}
+
+.panelReset {
+  background-image: none;
+  height: 140px;
+  width: 100%;
+  border-radius: 25px;
+  margin: 0px 0px 10px 0px;
+  position: absolute;
+  top: 276px;
+  background-color: #dfff00;
+  border: 4px solid #ff008d;
+}
+
+.panelReset h2 {
+  font-size: 2em;
+  color: #ff008d;
 }

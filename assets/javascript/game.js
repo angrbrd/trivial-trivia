@@ -1,7 +1,7 @@
 // ----- Game Variables ----- //
 
 // Total number of trivia questions known in advance
-var numQuestions = 3;
+var numQuestions = 5;
 
 // The list of all the game questions
 var allQuestions;
@@ -17,7 +17,7 @@ var questionsRight = 0;
 var questionsWrong = 0;
 
 // The number of seconds given to answer a question
-var secondsGiven = 10;
+var secondsGiven = 20;
 
 // The number of seconds left on the timer
 var secondsLeft;
@@ -58,7 +58,7 @@ function decrementTimer() {
   secondsLeft--;
 
   // Update the timer display
-  $("#timer").html(secondsLeft);
+  $("#timer").html("Time remaining: " + secondsLeft);
 
   // When the timer runs out, show wrong guess
   if (secondsLeft === 0) {
@@ -74,6 +74,8 @@ function stopTimer() {
 
 // A function that updates the display to the given question number
 function updateQuestion() {
+    $("#questionNumber").html("Question " + (userQuestion+1) + " out of " + allAnswers.length).show();
+
     // Variable that helps to find the appropriate question inside the questions array
     var questionOffset = userQuestion * 5;
 
@@ -100,12 +102,21 @@ function displayWompWomp() {
   $("#gameImage").attr("src", "./assets/images/fail" + userQuestion + ".gif");
   $("#gameImage").show();
 
-  $(".panelResult").addClass("resultFail");
-  $("#result").html("Womp womp... the correct answer is " + allAnswers[userQuestion]);
+  $(".panelResult").removeClass("resultSuccess").addClass("resultFail");
+  if (secondsLeft === 0) {
+    $("#result").html("Time is up! The correct answer is " + allAnswers[userQuestion]);
+  } else {
+    $("#result").html("Womp womp... the correct answer is " + allAnswers[userQuestion]);
+  }
   $(".panelResult").show();
 
   // Advance to the next question after a few seconds
-  setTimeout(nextQuestion, 5000);
+  if (userQuestion < numQuestions-1) {
+    setTimeout(nextQuestion, 5000);
+  } else {
+  // The game is over, ask the user if they would like to play again
+    setTimeout(playAgain, 3000);
+  }
 }
 
 // A function that displays the answer when the user guesses correctly
@@ -115,42 +126,51 @@ function displayWeee() {
   
   // Update the display
   $("#gameImage").attr("src", "./assets/images/success" + userQuestion + ".gif");
-  $(".panelResult").addClass("resultSuccess");
+  $("#gameImage").show();
+
+  $(".panelResult").removeClass("resultFail").addClass("resultSuccess");
   $("#result").html("Weee! That's right! The answer is " + allAnswers[userQuestion]);
   $(".panelResult").show();
 
   // Advance to the next question after a few seconds
-  setTimeout(nextQuestion, 5000);
+  if (userQuestion < numQuestions-1) {
+    setTimeout(nextQuestion, 5000);
+  } else {
+  // The game is over, ask the user if they would like to play again
+    setTimeout(playAgain, 3000);
+  }
 }
 
 // A function that advances the game to the next question
 function nextQuestion() {
-  if (userQuestion < numQuestions-1) {
     $("#gameImage").hide();
     $(".panelResult").hide();
 
     userQuestion++;
     updateQuestion();
 
-    $("#timer").html(secondsGiven);
+    $("#timer").html("Time remaining: " + secondsGiven);
     secondsLeft = secondsGiven;
     startTimer();
-  } else {
-    // The game is over, ask the user if they would like to play again
-    console.log("Game over! Play again?");
-  }
+}
+
+// A function that displays the "Play Again" button
+function playAgain() {
+  $(".panelResult").hide();
+
+  $(".panelReset").html("<h2>You answered " + questionsRight + " question correctly. Click here to play again!</h2>");
+  $(".panelReset").show();
 }
 
 // ----- Main Game Routine ----- //
 
 $(document).ready(function() {
 
-  console.log("ENTER Javascript");
-
   // Display only the "Start" button on document load
   $("#questionAnswers").hide();
   $("#gifyContainer").hide();
   $("#timer").hide();
+  $("#questionNumber").hide();
 
   // Specify the files containing the questions and answers
   var questionsFile = "./assets/questions.txt";
@@ -167,6 +187,7 @@ $(document).ready(function() {
     // Update the display
     $("#gifyContainer").show();
     $(".panelResult").hide();
+    $(".panelReset").hide();
     $(".startButton").hide();
     $("#instructions").hide();
 
@@ -175,7 +196,7 @@ $(document).ready(function() {
     $("#questionAnswers").show();
 
     // Start the countdown timer
-    $("#timer").html(secondsGiven);
+    $("#timer").html("Time remaining: " + secondsGiven);
     $("#timer").show();
     secondsLeft = secondsGiven;
     startTimer();
@@ -183,9 +204,38 @@ $(document).ready(function() {
 
   // Whenever one of the answer choices is selected, record the value
   $(".panelAnswer").on("click", function() {
-    console.log($(this).children(".option").html());
+    console.log($(this).children(".option").html() + " is selected");
 
+    var userGuess = $(this).children(".option").text().trim();
+    var answer = allAnswers[userQuestion].trim();
 
-  })
+    if (userGuess === answer) {
+      console.log("User guessed correctly!");
+
+      stopTimer();
+      displayWeee();
+    } else {
+      console.log("User guessed incorrectly");
+
+      stopTimer();
+      displayWompWomp();
+    }
+  });
+
+  // Whenever the reset button is clicked, the game is reset to the beginning
+  $(".panelReset").on("click", function() {
+    // Reset the game statistics
+    userQuestion = 0;
+    questionsRight = 0;
+    questionsWrong = 0;
+
+    // Update the display to show only the "Start" button
+    $("#questionAnswers").hide();
+    $("#gifyContainer").hide();
+    $("#timer").hide();
+    $("#questionNumber").hide();
+    $("#instructions").show();
+    $(".startButton").show();
+  });
 
 }); // main game routine

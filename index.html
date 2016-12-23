@@ -26,6 +26,7 @@
       <div class="content">
         <h1 class="text-center"><strong>Welcome to Trivial Trivia!</strong></h1>
         <h2 class="text-center" id="instructions">Press the start button to begin</h2>
+        <h2 class="text-center" id="questionNumber"></h2>
         <h2 class="text-center" id="timer"></h2>
       </div>
 
@@ -66,10 +67,13 @@
       <!-- Right Panel (Success or Fail Gify) -->
       <div class="col-lg-6" id="gifyContainer">
         <img src="./assets/images/question_mark.png" alt="Current game image" id="gameImage">
-        <!-- <img src="http://media4.giphy.com/media/47KjwlPVpnQOs/giphy.gif" alt="Current game image" id="gameImage"> -->
         
         <div class="panel-body text-center panelResult">
           <div id="result"></div>
+        </div>
+
+        <div class="panel-body text-center panelReset">
+          <h2></h2>
         </div>
       </div> <!-- Success or Fail Gify -->
 
