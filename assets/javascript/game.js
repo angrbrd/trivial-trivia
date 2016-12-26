@@ -1,7 +1,7 @@
 // ----- Game Variables ----- //
 
 // Total number of trivia questions
-var numQuestions = 5;
+var numQuestions = 20;
 
 // The list of all the game questions
 var allQuestions;
@@ -207,7 +207,7 @@ $(document).ready(function() {
     if (clicked === false) {
       clicked = true;
       $("#gameImage").hide();
-      
+
       console.log($(this).children(".option").html() + " is selected");
 
       var userGuess = $(this).children(".option").text().trim();
