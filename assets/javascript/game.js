@@ -111,10 +111,10 @@ function displayWompWomp() {
 
   // Advance to the next question after a few seconds
   if (userQuestion < numQuestions-1) {
-    setTimeout(nextQuestion, 5000);
+    setTimeout(nextQuestion, 10000);
   } else {
-  // The game is over, ask the user if they would like to play again
-    setTimeout(playAgain, 3000);
+    // The game is over, ask the user if they would like to play again
+    setTimeout(playAgain, 5000);
   }
 }
 
@@ -133,10 +133,10 @@ function displayWeee() {
 
   // Advance to the next question after a few seconds
   if (userQuestion < numQuestions-1) {
-    setTimeout(nextQuestion, 5000);
+    setTimeout(nextQuestion, 10000);
   } else {
-  // The game is over, ask the user if they would like to play again
-    setTimeout(playAgain, 3000);
+    // The game is over, ask the user if they would like to play again
+    setTimeout(playAgain, 5000);
   }
 }
 
